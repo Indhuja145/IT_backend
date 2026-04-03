@@ -10,13 +10,22 @@ const app = express();
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://it-project-gqoq-fz6rq7yy1-indhujas-projects-5f196112.vercel.app',
   process.env.FRONTEND_URL
 ].filter(Boolean);
 
+const isAllowedOrigin = (origin) => {
+  if (!origin) return true;
+  if (allowedOrigins.includes(origin)) return true;
+  try {
+    const host = new URL(origin).hostname;
+    if (host.endsWith('.vercel.app')) return true;
+  } catch {}
+  return false;
+};
+
 app.use(cors({
   origin: (origin, cb) => {
-    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+    if (isAllowedOrigin(origin)) return cb(null, true);
     cb(new Error('Not allowed by CORS'));
   },
   credentials: true
