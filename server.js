@@ -36,6 +36,7 @@ app.use('/uploads', express.static('uploads'));
 async function connectDatabase() {
   try {
     await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/IT_MIS', {
+      dbName: 'IT_MIS',
       serverSelectionTimeoutMS: 5000,
     });
     console.log('MongoDB Connected to IT_MIS database');
